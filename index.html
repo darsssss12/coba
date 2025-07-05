@@ -13,20 +13,16 @@
       background-color: #ffe4e1;
       color: #d5006d;
     }
-
     .product-card:hover {
       transform: scale(1.03);
       transition: transform 0.2s ease-in-out;
     }
-
     .sidebar {
       transition: transform 0.3s ease;
     }
-
     .sidebar-hidden {
       transform: translateX(-100%);
     }
-
     .cart-dropdown {
       position: absolute;
       right: 1.5rem;
@@ -38,7 +34,6 @@
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
       z-index: 50;
     }
-
     .footer-info {
       text-align: center;
       font-size: 12px;
@@ -46,11 +41,9 @@
       color: white;
       padding: 20px 0;
     }
-
     .footer-info p {
       margin: 5px 0;
     }
-
     .footer-info p:first-child {
       font-weight: bold;
     }
@@ -59,7 +52,7 @@
 <body>
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed top-0 left-0 w-64 h-full bg-white shadow-lg sidebar sidebar-hidden">
+  <aside id="sidebar" class="fixed top-0 left-0 w-64 h-full bg-white shadow-lg sidebar sidebar-hidden z-50">
     <div class="flex justify-between items-center p-4 border-b">
       <h2 class="font-bold text-lg text-pink-600">Menu</h2>
       <button id="closeSidebar" class="text-gray-600 hover:text-gray-900">
@@ -77,17 +70,21 @@
   </aside>
 
   <!-- Header -->
-  <header class="flex items-center justify-between px-6 py-4 bg-white shadow relative">
-    <button class="text-2xl text-gray-700 hover:text-pink-600" id="openSidebar"><i class="fas fa-bars"></i></button>
+  <header class="bg-white shadow px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between relative">
     <div class="flex items-center space-x-2">
+      <button class="text-2xl text-gray-700 hover:text-pink-600" id="openSidebar"><i class="fas fa-bars"></i></button>
       <img src="https://storage.googleapis.com/a1aa/image/616240d2-0f56-4cc4-6d2f-7478dbd200ea.jpg" alt="Logo" class="w-10 h-10" />
       <span class="font-bold text-xl text-pink-600">TH OFFICIAL</span>
     </div>
-    <form class="flex max-w-xl w-full mx-4">
-      <input type="search" placeholder="Cari produk..." class="flex-grow border rounded-l-md px-4 py-2 focus:ring-2 focus:ring-pink-500" id="searchInput" />
+
+    <!-- Desktop Search -->
+    <form class="hidden md:flex flex-grow max-w-md mx-4 w-full">
+      <input type="search" placeholder="Cari produk..." class="w-full border rounded-l-md px-4 py-2 focus:ring-2 focus:ring-pink-500" id="searchInput" />
       <button class="bg-pink-600 text-white px-4 rounded-r-md"><i class="fas fa-search"></i></button>
     </form>
-    <div class="relative">
+
+    <!-- Cart -->
+    <div class="relative mt-2 md:mt-0">
       <button class="text-2xl text-gray-700 hover:text-pink-600" id="cartButton"><i class="fas fa-shopping-cart"></i></button>
       <div id="cartDropdown" class="cart-dropdown hidden p-4">
         <h3 class="font-semibold text-pink-600 mb-2">Keranjang</h3>
@@ -95,16 +92,27 @@
         <button class="bg-pink-500 text-white px-3 py-1 rounded w-full hover:bg-pink-600 text-sm" onclick="goToCheckout()">Lanjut ke Pembelian</button>
       </div>
     </div>
+
+    <!-- Mobile Search -->
+    <div class="block md:hidden w-full mt-4">
+      <form class="flex w-full">
+        <input type="search" placeholder="Cari produk..." class="flex-grow border rounded-l-md px-3 py-2 focus:ring-2 focus:ring-pink-500" id="mobileSearchInput" />
+        <button class="bg-pink-600 text-white px-3 rounded-r-md"><i class="fas fa-search"></i></button>
+      </form>
+    </div>
   </header>
 
-  <!-- Countdown -->
-  <section class="bg-white border-b px-6 py-3 flex justify-between items-center">
-    <button class="text-pink-600 font-semibold text-sm border border-pink-600 px-3 py-1 rounded hover:bg-pink-50" onclick="window.location.href='purchase.html'">BELANJA SEMUA PRODUK</button>
+  <!-- Flash Sale Button -->
+  <section class="bg-white border-b px-4 sm:px-6 py-3 flex justify-center sm:justify-between items-center">
+    <button class="text-pink-600 font-semibold text-sm border border-pink-600 px-3 py-1 rounded hover:bg-pink-50" onclick="window.location.href='purchase.html'">
+      BELANJA SEMUA PRODUK
+    </button>
   </section>
 
   <!-- Produk -->
-  <main class="max-w-7xl mx-auto px-6 py-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6" id="productContainer"></main>
+  <main class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4" id="productContainer"></main>
 
+  <!-- Footer -->
   <footer>
     <div class="footer-info">
       <p>&copy; 2025 TH_OFFICIAL.</p>
@@ -114,21 +122,15 @@
 
   <script>
     const products = [
-      { name: "Nestlé DANCOW 3+ Madu 1Kg", price: 105500, original: 109538, discount: "-4%", image: "https://storage.googleapis.com/a1aa/image/25b77fb5-5626-4c55-0a05-c391f418cb12.jpg" },
-      { name: "Sweety Silver Pants M 32x3", price: 142300, original: 193800, discount: "-27%", image: "https://storage.googleapis.com/a1aa/image/ca2dff85-6ef5-46ac-3cdd-70eb7e0350df.jpg" },
-      { name: "Purbasari Lipstick Matte", price: 28987, original: 38900, discount: "-25%", image: "https://storage.googleapis.com/a1aa/image/cf988a8c-f713-4c0b-c615-01c5cdac8eb2.jpg" },
-      { name: "Kerudung Denay Floral", price: 20001, original: 110000, discount: "-82%", image: "https://storage.googleapis.com/a1aa/image/642c4335-690c-46f5-2eaa-da02d8562e72.jpg" },
-      { name: "SGM Eksplor IronC 3x900g", price: 247900, original: 267000, discount: "-7%", image: "https://storage.googleapis.com/a1aa/image/20f6c659-b9d3-443a-774d-0821415d884c.jpg" },
-      { name: "Purbasari Lulur 500g", price: 32000, original: 48000, discount: "-33%", image: "https://storage.googleapis.com/a1aa/image/52a58585-4d8d-42a9-9853-fa1eaae5d9b2.jpg" },
-      { name: "Bless Acne Series", price: 95000, original: 120000, discount: "-21%", image: "https://storage.googleapis.com/a1aa/image/fad7839c-1ae6-47eb-e2bb-03528ab7b713.jpg" },
-      { name: "Jeans Pria Biru", price: 175000, original: 215000, discount: "-19%", image: "https://storage.googleapis.com/a1aa/image/aa90ffff-dbd9-4400-cb8a-c2f8675badb4.jpg" },
-      { name: "Otten Coffee Maker", price: 130000, original: 150000, discount: "-13%", image: "https://storage.googleapis.com/a1aa/image/4cb091c9-b22a-4639-e1bd-09dfa6af16df.jpg" },
-      { name: "Hair Turban Microfiber", price: 21000, original: 29000, discount: "-28%", image: "https://storage.googleapis.com/a1aa/image/06451a16-3144-41db-aed8-ed063550cd73.jpg" },
-      { name: "Trim Restorer Cairan", price: 48000, original: 60000, discount: "-20%", image: "https://storage.googleapis.com/a1aa/image/06dac85f-99a4-4760-b4b5-a54cef314e9d.jpg" },
-      { name: "Kalkulator Hitam Digital", price: 35000, original: 45000, discount: "-22%", image: "https://storage.googleapis.com/a1aa/image/15d7e6fd-d686-4439-4a8b-489a72e78acc.jpg" },
-      { name: "Glad 2 Glow", price: 25000, original: 35000, discount: "-28%", image: "PRODUK1.JPG" },
-      { name: "Skintific Panthenol", price: 69000, original: 89000, discount: "-22%", image: "PRODUK2.JPG" },
-      { name: "lipstik Implora", price: 15000, original: 20000, discount: "-25%", image: "PRODUK3.JPG" }
+      { name: "Nestlé DANCOW 3+ Madu 1Kg", price: 105500, image: "https://storage.googleapis.com/a1aa/image/25b77fb5-5626-4c55-0a05-c391f418cb12.jpg" },
+      { name: "Sweety Silver Pants M 32x3", price: 142300, image: "https://storage.googleapis.com/a1aa/image/ca2dff85-6ef5-46ac-3cdd-70eb7e0350df.jpg" },
+      { name: "Purbasari Lipstick Matte", price: 28987, image: "https://storage.googleapis.com/a1aa/image/cf988a8c-f713-4c0b-c615-01c5cdac8eb2.jpg" },
+      { name: "Kerudung Denay Floral", price: 20001, image: "https://storage.googleapis.com/a1aa/image/642c4335-690c-46f5-2eaa-da02d8562e72.jpg" },
+      { name: "SGM Eksplor IronC 3x900g", price: 247900, image: "https://storage.googleapis.com/a1aa/image/20f6c659-b9d3-443a-774d-0821415d884c.jpg" },
+      { name: "Purbasari Lulur 500g", price: 32000, image: "https://storage.googleapis.com/a1aa/image/52a58585-4d8d-42a9-9853-fa1eaae5d9b2.jpg" },
+      { name: "Bless Acne Series", price: 95000, image: "https://storage.googleapis.com/a1aa/image/fad7839c-1ae6-47eb-e2bb-03528ab7b713.jpg" },
+      { name: "Jeans Pria Biru", price: 175000, image: "https://storage.googleapis.com/a1aa/image/aa90ffff-dbd9-4400-cb8a-c2f8675badb4.jpg" },
+      { name: "Otten Coffee Maker", price: 130000, image: "https://storage.googleapis.com/a1aa/image/4cb091c9-b22a-4639-e1bd-09dfa6af16df.jpg" }
     ];
 
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -171,7 +173,6 @@
 
     function goToCheckout() {
       if (cart.length === 0) return alert("Keranjang masih kosong!");
-      localStorage.setItem('cart', JSON.stringify(cart));
       window.location.href = 'checkout.html';
     }
 
@@ -180,12 +181,20 @@
       window.location.href = 'purchase.html';
     }
 
+    // Event Listener Pencarian
     document.getElementById('searchInput').addEventListener('input', function () {
       const query = this.value.toLowerCase();
       const filtered = products.filter(p => p.name.toLowerCase().includes(query));
       displayProducts(filtered);
     });
 
+    document.getElementById('mobileSearchInput').addEventListener('input', function () {
+      const query = this.value.toLowerCase();
+      const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+      displayProducts(filtered);
+    });
+
+    // Sidebar & Cart Button
     document.getElementById('openSidebar').addEventListener('click', () => {
       document.getElementById('sidebar').classList.remove('sidebar-hidden');
     });
@@ -199,6 +208,7 @@
       updateCartDropdown();
     });
 
+    // Tampilkan Produk
     displayProducts(products);
   </script>
 </body>
