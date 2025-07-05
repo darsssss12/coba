@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Form Pembelian</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #fff0f5; }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="px-6 py-4 bg-white shadow-md flex items-center justify-between">
+    <h1 class="text-2xl font-bold text-pink-600 flex items-center gap-2">
+      <i class="fas fa-shopping-bag"></i> Form Pembelian
+    </h1>
+    <a href="index.html" class="text-sm text-gray-600 hover:text-pink-600 transition">← Kembali ke Beranda</a>
+  </header>
+
+  <!-- Form -->
+  <main class="max-w-3xl mx-auto px-6 py-8 bg-white shadow-lg mt-10 rounded-lg">
+    <form id="formPurchase" class="space-y-6">
+      <div id="productList" class="space-y-6"></div>
+
+      <button type="submit" class="w-full bg-pink-500 text-white py-2 rounded-md font-semibold hover:bg-pink-600 transition duration-200">
+        <i class="fas fa-check-circle mr-1"></i> Konfirmasi Semua Pembelian
+      </button>
+    </form>
+
+    <!-- Output -->
+    <div id="purchaseDetails" class="mt-6 space-y-3"></div>
+  </main>
+
+  <!-- Script -->
+  <script>
+    const singleProduct = JSON.parse(localStorage.getItem('selectedProduct'));
+    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+
+    const productsToBuy = singleProduct ? [singleProduct] : cartItems;
+
+    const productListDiv = document.getElementById('productList');
+
+    function renderProducts() {
+      productListDiv.innerHTML = '';
+      productsToBuy.forEach((product, index) => {
+        productListDiv.innerHTML += `
+          <div class="border p-4 rounded-md bg-pink-50 shadow-sm">
+            <h3 class="text-lg font-semibold text-pink-700 mb-2">${product.name}</h3>
+            <input type="hidden" name="productName" value="${product.name}" />
+            <label class="block text-sm mb-1 font-medium text-gray-700">Jumlah:</label>
+            <input type="number" class="jumlah w-full px-3 py-2 border rounded-md mb-2" min="1" value="1" data-price="${product.price}" data-index="${index}" required />
+            <label class="block text-sm mb-1 font-medium text-gray-700">Total Harga:</label>
+            <input type="text" class="total w-full px-3 py-2 border rounded-md bg-gray-100 text-gray-600" value="Rp${formatCurrency(product.price)}" readonly />
+          </div>
+        `;
+      });
+    }
+
+    renderProducts();
+
+    function updateTotalHarga() {
+      document.querySelectorAll('.jumlah').forEach((input, index) => {
+        input.addEventListener('input', function () {
+          const jumlah = parseInt(this.value) || 0;
+          const price = parseInt(this.dataset.price);
+          const total = jumlah * price;
+          const totalField = document.querySelectorAll('.total')[index];
+          totalField.value = `Rp${formatCurrency(total)}`;
+          updateTotalPrice();  // Update the total price whenever quantity changes
+        });
+      });
+    }
+
+    updateTotalHarga();
+
+    function updateTotalPrice() {
+      const jumlahInputs = document.querySelectorAll('.jumlah');
+      const totalInputs = document.querySelectorAll('.total');
+      let totalPrice = 0;
+
+      totalInputs.forEach((input) => {
+        const total = parseInt(input.value.replace('Rp', '').replace(/\./g, '')) || 0;
+        totalPrice += total;
+      });
+
+      const totalPriceDiv = document.getElementById('totalPrice');
+      if (totalPriceDiv) {
+        totalPriceDiv.textContent = `Total Harga: Rp${formatCurrency(totalPrice)}`;
+      }
+    }
+
+    function formatCurrency(amount) {
+      return amount.toLocaleString('id-ID');  // Format number as currency (Indonesia)
+    }
+
+    document.getElementById('formPurchase').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const jumlahInputs = document.querySelectorAll('.jumlah');
+      const totalInputs = document.querySelectorAll('.total');
+
+      const details = Array.from(jumlahInputs).map((input, index) => {
+        const name = productsToBuy[index].name;
+        const jumlah = input.value;
+        const total = totalInputs[index].value;
+        return { name, jumlah, total };
+      });
+
+      const outputDiv = document.getElementById('purchaseDetails');
+      outputDiv.innerHTML = `
+        <div class="border-l-4 border-pink-600 bg-pink-50 p-4 rounded-md">
+          <h3 class="font-bold text-pink-600 text-lg mb-2"><i class="fas fa-receipt"></i> Rincian Pembelian</h3>
+          <ul class="list-disc pl-5 text-gray-700 space-y-1">
+            ${details.map(d => `<li><strong>${d.name}</strong> – Jumlah: ${d.jumlah}, Total: ${d.total}</li>`).join('')}
+          </ul>
+          <div class="mt-4 font-semibold text-pink-600">
+            <p id="totalPrice">Total Harga: Rp0</p>
+          </div>
+        </div>
+      `;
+
+      updateTotalPrice();  // Call to ensure the total price is calculated and displayed
+
+      this.reset();
+      localStorage.removeItem('selectedProduct');
+      localStorage.removeItem('cart');
+    });
+  </script>
+</body>
+</html>

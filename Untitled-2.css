@@ -1,0 +1,90 @@
+/* Reset dasar */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  padding: 0 10px;
+}
+
+/* Header dan Navigasi */
+header {
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+}
+
+header h1 {
+  margin-bottom: 10px;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav ul {
+  display: flex;
+  gap: 15px;
+  list-style: none;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+}
+
+.cart-icon {
+  font-size: 24px;
+}
+
+/* Main content */
+main {
+  padding: 20px 0;
+}
+
+section {
+  margin-bottom: 30px;
+}
+
+.produk {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 10px;
+  background-color: #eee;
+}
+
+/* Responsif */
+@media (max-width: 1200px) {
+  body {
+    background-color: #f9f9f9;
+  }
+}
+
+@media (max-width: 768px) {
+  nav ul {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 320px) {
+  header h1 {
+    font-size: 18px;
+  }
+
+  .cart-icon {
+    font-size: 20px;
+  }
+}
